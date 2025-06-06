@@ -5,7 +5,13 @@ import Link from 'next/link'
 import React from 'react'
 
 async function getProductsFeatured() : Promise<IProduct[]> {
-    const res = await api('/products/featured'),
+    const res = await api('/products/featured', {
+        //cache: 'force-cache' essa rota vai ser usada apenas uma vez, se outro usuario fazer essa req, ele vai pegar do cache ao inves de realizar a requisição (é o default)
+        // o no-store, é dizendo q todos os usuarios vão fazer essa requisição toda vez q acessar a rota
+        next:{
+            revalidate: 60 * 60// quantidade em segundos, dentro desse tempo limite, todos os usuarios vão acessar os dados da requisição via cache do primeiro usuario que acessou, dps vai resetar o cache
+        }
+    }),
         productsFeatured = await res.json()
 
     return productsFeatured
