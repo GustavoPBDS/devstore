@@ -3,11 +3,27 @@ import Image from 'next/image'
 import React from 'react'
 import IParamsSlug from '@/data/types/IParamsSlug'
 import IProduct from '@/data/types/IProduct'
+import { Metadata } from 'next'
 
 async function getProduct(slug: string) : Promise<IProduct> {
     const res = await api(`/product/${slug}`,{cache:'no-store'})
     return await res.json()
 }
+
+export async function generateMetadata({params} : {params: IParamsSlug}) : Promise<Metadata> {
+    const {slug} = await params,
+        Product = await getProduct(slug)
+    return {
+        title: Product.title
+    }
+}
+
+//função para criar paginas estaticas que recebem um parametro, cacheando a pagina para o primeiro user
+export function generateStaticParams(){
+    return [{slug:'moletomVermelho'}]
+}
+//usar muito disso vai aumentar o tempo de build, usar com com moderação
+
 
 export default async function ProductPage({params} : {params: IParamsSlug}) {
     const {slug} = await params,
