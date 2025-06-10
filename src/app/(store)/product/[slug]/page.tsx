@@ -4,6 +4,7 @@ import React from 'react'
 import IParamsSlug from '@/data/types/IParamsSlug'
 import IProduct from '@/data/types/IProduct'
 import { Metadata } from 'next'
+import AddToCartButton from '@/components/add-to-cart-button'
 
 async function getProduct(slug: string) : Promise<IProduct> {
     const res = await api(`/product/${slug}`,{cache:'no-store'})
@@ -40,6 +41,7 @@ export default async function ProductPage({params} : {params: IParamsSlug}) {
                     width={1000}
                     height={1000}
                     quality={100}
+                    loading='eager'
                 />
             </div>
 
@@ -77,10 +79,7 @@ export default async function ProductPage({params} : {params: IParamsSlug}) {
                     </div>
                 </div>
                 
-                <button 
-                    type='button' 
-                    className='mt-8 flex h-12 items-center justify-center rounded-full bg-emerald-600 font-semibold text-white cursor-pointer'
-                >Adicionar ao Carrinho</button>
+                <AddToCartButton Pid={Product.id}/>
             </div>
         </div>
     )
